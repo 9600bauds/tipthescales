@@ -1,0 +1,27 @@
+# Node.js related
+node_modules/
+npm-debug.log
+yarn-error.log
+backend/.env
+
+# React / create-react-app related
+frontend/node_modules/
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+frontend/build/
+frontend/.DS_Store
+
+# IDEs and editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# OS related
+.DS_Store
+Thumbs.db
