@@ -9,6 +9,7 @@ function Room() {
     const { roomName } = useParams();
   
     const [rolls, setRolls] = useState([]); // State to store the list of rolls
+    const [username, setUsername] = useState(''); // State to store the current username input
     
     useEffect(() => {
         const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -25,7 +26,7 @@ function Room() {
 
     const handleRollClick = () => {
         const rollData = {
-            username: 'todo',
+            username: username,
         };
 
         const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -46,7 +47,7 @@ function Room() {
             <h1>Welcome to room {roomName}!</h1>
             <RollList rolls={rolls} />
             <RollButton handleRollClick={handleRollClick} />
-            <NameInput />
+            <NameInput username={username} setUsername={setUsername} />
         </div>
     );
 }

@@ -1,23 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-function NameInput() {
-    const [username, setUsername] = useState(''); // Local state to store the current input
-
+function NameInput(props) {
     const handleChange = (event) => {
-        setUsername(event.target.value);
+        props.setUsername(event.target.value);
     };
 
     return (
         <div>
             <input
                 type="text"
-                value={username}
+                value={props.username}
                 onChange={handleChange}
-                placeholder="Enter your name..."
                 maxLength={64}
             />
         </div>
     );
 }
+
+NameInput.propTypes = {
+    username: PropTypes.string,
+    setUsername: PropTypes.func
+};
 
 export default NameInput;
