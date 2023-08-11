@@ -29,7 +29,7 @@ roomRouter.post('/:name/roll', async (request, response) => {
 
     const sanitizedUsername = DOMPurify.sanitize(request.body.username);
     if(!sanitizedUsername){
-        return response.status(401).json({ error: 'Username is required' });
+        return response.status(400).json({ error: 'Username is required' });
     }
 
     const rollValue = Math.floor(Math.random() * 20) + 1; //todo max number should depend on request.body
