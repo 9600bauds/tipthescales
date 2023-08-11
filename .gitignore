@@ -27,3 +27,4 @@ frontend/.DS_Store
 # OS related
 .DS_Store
 Thumbs.db
+list.ps1

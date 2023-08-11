@@ -2,15 +2,13 @@ const mongoose = require('mongoose');
 const roomRouter = require('express').Router();
 const middleware = require('../utils/middleware');
 
-const { JSDOM } = require('jsdom');
-const createDOMPurify = require('dompurify');
-const window = new JSDOM('').window;
-const DOMPurify = createDOMPurify(window);
+const sanitizeInput = require('../utils/sanitization');
 
 const socket = require('../utils/socket');
 
 const Room = require('../models/room');
 const { transformIdAndV } = require('../utils/transformIdAndV');
+const { saveRollToDatabase, createRoll } = require('../utils/rollGenerator');
 
 roomRouter.get('/:name', async (request, response) => {
     let room = await Room.findOne({ name: request.params.name });
@@ -27,33 +25,17 @@ roomRouter.post('/:name/roll', async (request, response) => {
         return response.status(404).json({ error: 'Room not found' });
     }
 
-    const sanitizedUsername = DOMPurify.sanitize(request.body.username);
+    const sanitizedUsername = sanitizeInput(request.body.username);
     if(!sanitizedUsername){
         return response.status(400).json({ error: 'Username is required' });
     }
 
-    const rollValue = Math.floor(Math.random() * 20) + 1; //todo max number should depend on request.body
-    
     const rollData = {
-        _id: new mongoose.Types.ObjectId(),
-        timestamp: new Date(),
-        username: sanitizedUsername,
-        value: rollValue
+        ...createRoll(20),
+        username: sanitizedUsername
     };
 
-    //We need to use atomic operations to avoid concurrency issues.
-    const updateResult = await Room.findOneAndUpdate(
-        { name: request.params.name },
-        {
-            $push: {
-                rolls: {
-                    $each: [rollData],
-                    $slice: -20
-                }
-            }
-        },
-        { new: true }  // Return the updated document
-    );
+    await saveRollToDatabase(room.name, rollData);
 
     const rollObj = transformIdAndV(rollData);
 
