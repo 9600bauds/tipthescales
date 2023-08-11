@@ -4,7 +4,6 @@ import RollItem from './RollItem';
 
 
 function RollList(props) {
-    console.log('Roll list has:', props.rolls);
     return (
         <div>
             <h2>Recent Rolls</h2>

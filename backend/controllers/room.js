@@ -1,8 +1,16 @@
 const mongoose = require('mongoose');
 const roomRouter = require('express').Router();
 const middleware = require('../utils/middleware');
+
+const { JSDOM } = require('jsdom');
+const createDOMPurify = require('dompurify');
+const window = new JSDOM('').window;
+const DOMPurify = createDOMPurify(window);
+
 const socket = require('../utils/socket');
+
 const Room = require('../models/room');
+const { transformIdAndV } = require('../utils/transformIdAndV');
 
 roomRouter.get('/:name', async (request, response) => {
     let room = await Room.findOne({ name: request.params.name });
@@ -14,16 +22,22 @@ roomRouter.get('/:name', async (request, response) => {
 });
 
 roomRouter.post('/:name/roll', async (request, response) => {
-    let room = await Room.findOne({ name: request.params.name });
+    const room = await Room.findOne({ name: request.params.name });
     if (!room) {
         return response.status(404).json({ error: 'Room not found' });
     }
 
+    const sanitizedUsername = DOMPurify.sanitize(request.body.username);
+    if(!sanitizedUsername){
+        return response.status(401).json({ error: 'Username is required' });
+    }
+
     const rollValue = Math.floor(Math.random() * 20) + 1; //todo max number should depend on request.body
-    const username = request.body.username;
-    const newRoll = {
+    
+    const rollData = {
         _id: new mongoose.Types.ObjectId(),
-        username,
+        timestamp: new Date(),
+        username: sanitizedUsername,
         value: rollValue
     };
 
@@ -33,7 +47,7 @@ roomRouter.post('/:name/roll', async (request, response) => {
         {
             $push: {
                 rolls: {
-                    $each: [newRoll],
+                    $each: [rollData],
                     $slice: -20
                 }
             }
@@ -41,10 +55,12 @@ roomRouter.post('/:name/roll', async (request, response) => {
         { new: true }  // Return the updated document
     );
 
-    //const io = socket.getIo();
-    //io.to(request.params.roomID).emit('newRoll', newRoll);
+    const rollObj = transformIdAndV(rollData);
 
-    response.json(newRoll);
+    const io = socket.getIo();
+    io.to(room.name).emit('newRoll', rollObj);
+
+    response.json(rollObj);
 });
 
 module.exports = roomRouter;
