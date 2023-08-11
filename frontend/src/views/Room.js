@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import io from 'socket.io-client';
 
@@ -25,8 +26,16 @@ function Room() {
             addRoll(rollData);
         });
 
+        socket.on('connect_error', (error) => {
+            toast.error('Connection error:', error);
+        });
+        
+        socket.on('reconnect', (attemptNumber) => {
+            toast.error('Reconnected after', attemptNumber, 'attempts!');
+        });
+
         socket.on('error', (errorData) => {
-            console.error('Socket Error:', errorData.error);
+            toast.error('Socket Error:', errorData.error);
         });
 
         getInitialRolls();
@@ -46,7 +55,7 @@ function Room() {
         fetch(`${BACKEND_URL}/api/room/${roomName}`)
             .then(response => response.json())
             .then(data => setRolls(data.rolls))
-            .catch(error => console.error('Error fetching rolls:', error));
+            .catch(error => toast.error('Error fetching rolls:', error));
     };
 
     const handleRollClick = () => {
@@ -61,7 +70,7 @@ function Room() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(rollData)
-        }).catch(error => console.error('Error making roll:', error));
+        }).catch(error => toast.error('Error making roll:', error));
     };
 
     return (

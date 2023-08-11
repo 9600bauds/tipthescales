@@ -28,3 +28,4 @@ frontend/.DS_Store
 .DS_Store
 Thumbs.db
 list.ps1
+frontend/package-lock.json
