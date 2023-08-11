@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import io from 'socket.io-client';
-let socket;
 
 import RollButton from '../components/RollButton';
 import NameInput from '../components/NameInput';
@@ -18,7 +17,7 @@ function Room() {
         const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
         console.log(BACKEND_URL);
 
-        socket = io.connect(BACKEND_URL);
+        const socket = io.connect(BACKEND_URL);
         socket.emit('joinRoom', roomName);
 
         // Listen for new rolls
@@ -63,8 +62,6 @@ function Room() {
             },
             body: JSON.stringify(rollData)
         }).catch(error => console.error('Error making roll:', error));
-
-        //socket.emit('rollDice', rollData);
     };
 
     return (
