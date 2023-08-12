@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
@@ -50,27 +51,28 @@ function Room() {
         setRolls(prevRolls => [...prevRolls, newRoll].slice(-maxRolls));
     };
 
-    const getInitialRolls = () => {
+    const getInitialRolls = async () => {
         const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-        fetch(`${BACKEND_URL}/api/room/${roomName}`)
-            .then(response => response.json())
-            .then(data => setRolls(data.rolls))
-            .catch(error => toast.error('Error fetching rolls:', error));
+        try {
+            const response = await axios.get(`${BACKEND_URL}/api/room/${roomName}`);
+            setRolls(response.data.rolls);
+        } catch (error) {
+            toast.error(`Error fetching rolls: ${error}`);
+        }
+        
     };
 
-    const handleRollClick = () => {
+    const handleRollClick = async () => {
         const rollData = {
             username: username,
         };
 
         const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-        fetch(`${BACKEND_URL}/api/room/${roomName}/roll`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(rollData)
-        }).catch(error => toast.error('Error making roll:', error));
+        try {
+            await axios.post(`${BACKEND_URL}/api/room/${roomName}/roll`, rollData);
+        } catch (error) {
+            toast.error(`Error making roll: ${error}`);
+        }
     };
 
     return (
