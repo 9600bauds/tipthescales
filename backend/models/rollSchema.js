@@ -14,9 +14,6 @@ const rollSchema = new mongoose.Schema({
     modifier: {
         type: Number,
     },
-    tip: {
-        type: Number,
-    },
     timestamp: { type: Date, default: Date.now }
 });
 

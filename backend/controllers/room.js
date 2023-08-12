@@ -1,26 +1,27 @@
-const mongoose = require('mongoose');
 const roomRouter = require('express').Router();
-const middleware = require('../utils/middleware');
 
 const sanitizeInput = require('../utils/sanitization');
 
 const socket = require('../utils/socket');
 
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
 const Room = require('../models/room');
 const { transformIdAndV } = require('../utils/transformIdAndV');
 const { saveRollToDatabase, createRoll } = require('../utils/rollGenerator');
 
-roomRouter.get('/:name', async (request, response) => {
-    let room = await Room.findOne({ name: request.params.name });
+roomRouter.get('/:roomName', async (request, response) => {
+    let room = await Room.findOne({ name: request.params.roomName });
     if (!room) {
-        room = new Room({ name: request.params.name });
+        room = new Room({ name: request.params.roomName });
         await room.save();
     }
     response.json(room);
 });
 
-roomRouter.post('/:name/roll', async (request, response) => {
-    const room = await Room.findOne({ name: request.params.name });
+roomRouter.post('/:roomName/roll', async (request, response) => {
+    let room = await Room.findOne({ name: request.params.roomName });
     if (!room) {
         return response.status(404).json({ error: 'Room not found' });
     }
@@ -34,6 +35,24 @@ roomRouter.post('/:name/roll', async (request, response) => {
         ...createRoll(20),
         username: sanitizedUsername
     };
+
+    //Rig the result only if the room already has a password set, and the user has a cookie for that
+    if(request.body.rollResult && room.passwordHash) {
+        const token = request.cookies['auth_' + request.params.roomName];
+        if (!token) {
+            return response.status(400).json({ error: 'Authorization token not found!' });
+        }
+        try {
+            const decodedToken = jwt.verify(token, process.env.SECRET);
+            if (decodedToken.roomName !== request.params.roomName) {
+                return response.status(400).json({ error: 'Authorization failed!' });
+            }
+            rollData.value = request.body.rollResult;
+    
+        } catch (err) {
+            return response.status(400).json({ error: 'Authorization failed!' });
+        }
+    }
 
     await saveRollToDatabase(room.name, rollData);
 
