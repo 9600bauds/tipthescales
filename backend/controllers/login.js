@@ -6,6 +6,7 @@ const sanitizeInput = require('../utils/sanitization');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+// Endpoint to verify if the user's authentication cookie for the room is valid.
 loginRouter.post('/:roomName/verifyCookie', async (request, response) => {
     const token = request.cookies['auth_' + request.params.roomName];
     let isVerified = false;
@@ -25,7 +26,7 @@ loginRouter.post('/:roomName/verifyCookie', async (request, response) => {
     return response.json({ isAuthenticated: isVerified });
 });
 
-
+// Endpoint to authenticate a user into a room. If the room doesn't have a password, sets one.
 loginRouter.post('/:roomName', async (request, response) => {
     const saltRounds = 10
     
@@ -41,6 +42,7 @@ loginRouter.post('/:roomName', async (request, response) => {
         return response.status(401).json({ error: 'Password is required!' });
     }
 
+    // If room doesn't have a password, set one. Otherwise, validate the provided password.
     if (!room.passwordHash) {
         //Set the room's password here
         room.passwordHash = await bcrypt.hash(inputPw, saltRounds);

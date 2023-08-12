@@ -40,22 +40,27 @@ roomRouter.post('/:roomName/roll', async (request, response) => {
     if(request.body.rollResult && room.passwordHash) {
         const token = request.cookies['auth_' + request.params.roomName];
         if (!token) {
-            return response.status(400).json({ error: 'Authorization token not found!' });
+            return response.status(401).json({ error: 'Authorization token not found!' });
         }
         try {
             const decodedToken = jwt.verify(token, process.env.SECRET);
             if (decodedToken.roomName !== request.params.roomName) {
-                return response.status(400).json({ error: 'Authorization failed!' });
+                return response.status(403).json({ error: 'Authorization failed!' });
             }
             rollData.value = request.body.rollResult;
     
         } catch (err) {
-            return response.status(400).json({ error: 'Authorization failed!' });
+            return response.status(403).json({ error: 'Authorization failed!' });
         }
     }
 
-    await saveRollToDatabase(room.name, rollData);
-
+    try {
+        await saveRollToDatabase(room.name, rollData);
+    } catch (err) {
+        console.error('Error saving roll to database:', err.message);
+        return response.status(500).json({ error: 'Internal server error while saving roll' });
+    }
+    
     const rollObj = transformIdAndV(rollData);
 
     const io = socket.getIo();
