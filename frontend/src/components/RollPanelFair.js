@@ -16,9 +16,8 @@ function RollPanelFair(props) {
             username: props.username,
         };
 
-        const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
         try {
-            await axios.post(`${BACKEND_URL}/api/room/${props.roomName}/roll`, rollData, { withCredentials: true });
+            await axios.post(`/api/room/${props.roomName}/roll`, rollData, { withCredentials: true });
         } catch (error) {
             const errorMessage = error.response && error.response.data && error.response.data.error 
                 ? error.response.data.error 

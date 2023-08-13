@@ -29,9 +29,8 @@ function RollPanelRigged(props) {
             rollResult: rollResult,
         };
 
-        const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
         try {
-            await axios.post(`${BACKEND_URL}/api/room/${props.roomName}/roll`, rollData, { withCredentials: true });
+            await axios.post(`/api/room/${props.roomName}/roll`, rollData, { withCredentials: true });
             setRollResult(null);  // Reset the roll result after confirmation
         } catch (error) {
             const errorMessage = error.response && error.response.data && error.response.data.error 

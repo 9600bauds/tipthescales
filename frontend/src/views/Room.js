@@ -25,7 +25,7 @@ function Room() {
     };
 
     useEffect(() => {
-        const socket = io.connect(process.env.REACT_APP_BACKEND_URL);
+        const socket = io.connect('/');
         socket.emit('joinRoom', roomName);
 
         // Listen for new rolls
@@ -60,7 +60,7 @@ function Room() {
 
     const getInitialRolls = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/room/${roomName}`);
+            const response = await axios.get(`/api/room/${roomName}`);
             setRolls(response.data.rolls);
         } catch (error) {
             toast.error(`Error fetching rolls: ${getErrorMessage(error)}`);
@@ -68,7 +68,7 @@ function Room() {
     };
 
     const initialAuthentication = async () => {
-        axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/login/${roomName}/verifyCookie`, { roomName }, { withCredentials: true })
+        axios.post(`/api/login/${roomName}/verifyCookie`, { roomName }, { withCredentials: true })
             .then(response => {
                 if (response.data.isAuthenticated) {
                     setIsAuthenticated(true);
@@ -83,7 +83,7 @@ function Room() {
 
 
     const authenticateFunc = async (password) => {
-        axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/login/${roomName}`, { password }, { withCredentials: true })
+        axios.post(`/api/login/${roomName}`, { password }, { withCredentials: true })
             .then(response => {
                 setIsAuthenticated(true);
             })
@@ -95,6 +95,7 @@ function Room() {
 
     return (
         <div>
+            Welcome to {process.env.FRONTEND_URL}!
             <RollList rolls={rolls} />
 
             <NameInput username={username} setUsername={setUsername} />
