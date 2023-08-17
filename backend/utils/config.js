@@ -7,7 +7,7 @@ const FRONTEND_URL = process.env.FRONTEND_URL;
 const MAX_ROLLS = process.env.MAX_ROLLS;
 
 const DB_URI =
-    process.env.NODE_ENV === 'test'
+    process.env.NODE_ENV === 'development'
         ? process.env.TEST_MONGODB_URI
         : process.env.MONGODB_URI;
 

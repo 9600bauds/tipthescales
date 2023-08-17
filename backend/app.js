@@ -11,7 +11,7 @@ const roomRouter = require('./controllers/room');
 const loginRouter = require('./controllers/login');
 
 const mongoose = require('mongoose');
-mongoose.connect(process.env.MONGODB_URI, {
+mongoose.connect(config.DB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
