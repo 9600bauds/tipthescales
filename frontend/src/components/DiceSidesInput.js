@@ -7,7 +7,7 @@ function DiceSidesInput(props) {
     };
 
     return (
-        <span>
+        <span id='sidesInput'>
             <input
                 type="number"
                 value={props.sides}

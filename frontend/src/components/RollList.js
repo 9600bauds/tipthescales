@@ -5,7 +5,7 @@ import RollItem from './RollItem';
 
 function RollList(props) {
     return (
-        <div>
+        <div id='rollList'>
             {props.rolls.map(roll =>
                 <RollItem key={roll.id} roll={roll} />
             )}

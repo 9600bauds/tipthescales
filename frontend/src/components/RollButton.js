@@ -5,7 +5,7 @@ import { formatModifier } from '../utils/formatting';
 
 function RollButton(props) {    
     return (
-        <span>
+        <span className='rollButton'>
             <button onClick={props.onClick}>
                 {`Roll a D${props.sides}${formatModifier(props.modifier)}`}
             </button>

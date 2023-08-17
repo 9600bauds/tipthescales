@@ -7,7 +7,7 @@ function NameInput(props) {
     };
 
     return (
-        <span>
+        <span id='usernameInput'>
             <input
                 type="text"
                 value={props.username}

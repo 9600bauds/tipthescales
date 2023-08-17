@@ -7,7 +7,7 @@ function ModifierInput(props) {
     };
 
     return (
-        <span>
+        <span id='modifierInput'>
             <input
                 type="number"
                 value={props.modifier}

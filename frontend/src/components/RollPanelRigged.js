@@ -45,7 +45,7 @@ function RollPanelRigged(props) {
     };
 
     return (
-        <span>
+        <span id='rollPanelRigged'>
             {rollResult === null ? (
                 <RollButton sides={props.sides} modifier={props.modifier} onClick={handleRollClick} />
             ) : (

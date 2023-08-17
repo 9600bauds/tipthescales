@@ -20,7 +20,7 @@ function LoginPanel(props) {
     return (
         <span>
             {isExpanded ? (
-                <span>
+                <span id='passwordInput'>
                     <input 
                         type="password" 
                         placeholder="Enter password" 
@@ -30,7 +30,7 @@ function LoginPanel(props) {
                     <button onClick={submitClicked}>Submit</button>
                 </span>
             ) : (
-                <span onClick={handleExpand}>Login</span>
+                <span id='loginCollapsed' onClick={handleExpand}>Login</span>
             )}
         </span>
     );

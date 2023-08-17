@@ -29,7 +29,7 @@ function RollPanelFair(props) {
     };
 
     return (
-        <span>
+        <span id='rollPanelFair'>
             <RollButton sides={props.sides} modifier={props.modifier} onClick={handleRollClick} />
         </span>
     );

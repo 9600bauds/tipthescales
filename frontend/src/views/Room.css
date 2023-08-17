@@ -1,0 +1,52 @@
+/* General Styles */
+body {
+    background-color: #f4f4f4;
+    font-family: 'Arial', sans-serif;
+}
+
+.container {
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+#sidesInput, #passwordInput, #loginCollapsed, #modifierInput, #usernameInput, #rollPanelFair, #rollPanelRigged {
+    margin: 5px;
+}
+
+.rollButton button, #passwordInput button, #rollPanelRigged button {
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 5px 10px;
+    transition: background-color 0.3s;
+}
+
+.rollButton button:hover, #passwordInput button:hover, #rollPanelRigged button:hover {
+    background-color: #0056b3;
+}
+
+.roll {
+    border-bottom: 1px solid #e0e0e0;
+    margin: 10px 0;
+    padding: 10px 0;
+}
+
+.username {
+    color: #333;
+    font-weight: bold;
+}
+
+.total {
+    font-size: 1.25em;
+    font-weight: bold;
+}
+
+.info {
+    color: #6d6d6d;
+    font-size: 0.9em;
+    margin-left: 5px;
+}

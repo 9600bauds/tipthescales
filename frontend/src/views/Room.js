@@ -15,6 +15,8 @@ import RollList from '../components/RollList';
 import RollPanelFair from '../components/RollPanelFair';
 import RollPanelRigged from '../components/RollPanelRigged';
 
+import './Room.css';
+
 function Room() {
     const { roomName } = useParams();
 
