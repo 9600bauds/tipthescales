@@ -5,7 +5,11 @@ import { toast } from 'react-toastify';
 
 import io from 'socket.io-client';
 
+import LoginPanel from '../components/LoginPanel';
 import NameInput from '../components/NameInput';
+import ModifierInput from '../components/ModifierInput';
+import DiceSidesInput from '../components/DiceSidesInput';
+
 import RollList from '../components/RollList';
 
 import RollPanelFair from '../components/RollPanelFair';
@@ -18,6 +22,9 @@ function Room() {
 
     const [rolls, setRolls] = useState([]); // State to store the list of rolls
     const [username, setUsername] = useState(''); // State to store the current username input
+
+    const [modifier, setModifier] = useState(0); // Rolls will be modified by this amount
+    const [sides, setSides] = useState(20); // How many sides does the dice have?
 
     const getErrorMessage = (error) => {
         //evil .data witchery
@@ -55,13 +62,13 @@ function Room() {
 
     const addRoll = (newRoll) => {
         const maxRolls = process.env.REACT_APP_MAX_ROLLS;
-        setRolls(prevRolls => [...prevRolls, newRoll].slice(-maxRolls));
+        setRolls(prevRolls => [newRoll, ...prevRolls].slice(0, maxRolls));
     };
 
     const getInitialRolls = async () => {
         try {
             const response = await axios.get(`/api/room/${roomName}`);
-            setRolls(response.data.rolls);
+            setRolls(response.data.rolls.reverse());
         } catch (error) {
             toast.error(`Error fetching rolls: ${getErrorMessage(error)}`);
         }
@@ -94,16 +101,52 @@ function Room() {
     };
 
     return (
-        <div>
-            Welcome to {process.env.FRONTEND_URL}!
-            <RollList rolls={rolls} />
+        <div className="container mt-5">
+            {/* Username and login panel */}
+            <div className="row">
+                <div className="col-md-6">
+                    Username:
+                    <NameInput username={username} setUsername={setUsername} />
+                </div>
+                <div className="col-md-6">
+                    {
+                        isAuthenticated
+                            ? null  // No authentication panel if already authenticated
+                            : <LoginPanel authenticateFunc={authenticateFunc} />
+                    }
+                </div>
+            </div>
 
-            <NameInput username={username} setUsername={setUsername} />
-            {
-                isAuthenticated
-                    ? <RollPanelRigged username={username} roomName={roomName} />
-                    : <RollPanelFair username={username} roomName={roomName} authenticateFunc={authenticateFunc} />
-            }
+            {/* Dice setting panel  */}
+            <div className="row mt-3">
+                <div className="col-md-6">
+                    Dice sides:
+                    <DiceSidesInput sides={sides} setSides={setSides} />
+                </div>
+                <div className="col-md-6">
+                    Modifier:
+                    <ModifierInput modifier={Number(modifier)} setModifier={setModifier} />
+                </div>
+            </div>
+
+            {/* Roll button and 'rigging' mechanism */}
+            <div className="row mt-3">
+                <div className="col-md-12">
+                    {
+                        isAuthenticated
+                            ? <RollPanelRigged username={username} roomName={roomName} sides={sides} modifier={Number(modifier)} />
+                            : <RollPanelFair username={username} roomName={roomName} sides={sides} modifier={Number(modifier)} />
+                    }
+                </div>
+            </div>
+
+            {/* Recent rolls */}
+            <div className="row mt-3">
+                <div className="col-md-12">
+                    <h2>Recent Rolls</h2>
+                    <RollList rolls={rolls} />
+                </div>
+            </div>
         </div>
     );
 }

@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
+import RollButton from './RollButton';
+
 function RollPanelRigged(props) {
     const [rollResult, setRollResult] = useState(null);
     
@@ -27,6 +29,8 @@ function RollPanelRigged(props) {
         const rollData = {
             username: props.username,
             rollResult: rollResult,
+            sides: props.sides,
+            modifier: props.modifier,
         };
 
         try {
@@ -41,24 +45,26 @@ function RollPanelRigged(props) {
     };
 
     return (
-        <div>
+        <span>
             {rollResult === null ? (
-                <button onClick={handleRollClick}>Roll D20</button>
+                <RollButton sides={props.sides} modifier={props.modifier} onClick={handleRollClick} />
             ) : (
-                <div>
+                <span>
                     <button onClick={handleDecrement}>-</button>
                     {rollResult}
                     <button onClick={handleIncrement}>+</button>
                     <button onClick={handleConfirmClick}>Confirm</button>
-                </div>
+                </span>
             )}
-        </div>
+        </span>
     );
 }
 
 RollPanelRigged.propTypes = {
     username: PropTypes.string,
     roomName: PropTypes.string.isRequired,
+    sides: PropTypes.number.isRequired,
+    modifier: PropTypes.number,
 };
 
 export default RollPanelRigged;

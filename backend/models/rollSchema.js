@@ -14,6 +14,11 @@ const rollSchema = new mongoose.Schema({
     modifier: {
         type: Number,
     },
+    sides: {
+        type: Number,
+        required: true,
+        min: 2,
+    },
     timestamp: { type: Date, default: Date.now }
 });
 

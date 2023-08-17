@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-import LoginPanel from '../components/LoginPanel';
+import RollButton from './RollButton';
 
 function RollPanelFair(props) {
 
@@ -14,6 +14,8 @@ function RollPanelFair(props) {
 
         const rollData = {
             username: props.username,
+            sides: props.sides,
+            modifier: props.modifier,
         };
 
         try {
@@ -27,19 +29,17 @@ function RollPanelFair(props) {
     };
 
     return (
-        <div>
-            <button onClick={handleRollClick}>
-                Roll D20
-            </button>
-            <LoginPanel authenticateFunc={props.authenticateFunc} />
-        </div>
+        <span>
+            <RollButton sides={props.sides} modifier={props.modifier} onClick={handleRollClick} />
+        </span>
     );
 }
 
 RollPanelFair.propTypes = {
     username: PropTypes.string,
     roomName: PropTypes.string.isRequired,
-    authenticateFunc: PropTypes.func.isRequired,
+    sides: PropTypes.number.isRequired,
+    modifier: PropTypes.number,
 };
 
 export default RollPanelFair;

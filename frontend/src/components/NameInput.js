@@ -7,20 +7,20 @@ function NameInput(props) {
     };
 
     return (
-        <div>
+        <span>
             <input
                 type="text"
                 value={props.username}
                 onChange={handleChange}
                 maxLength={64}
             />
-        </div>
+        </span>
     );
 }
 
 NameInput.propTypes = {
-    username: PropTypes.string,
-    setUsername: PropTypes.func
+    username: PropTypes.string.isRequired,
+    setUsername: PropTypes.func.isRequired
 };
 
 export default NameInput;

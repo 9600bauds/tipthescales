@@ -2,5 +2,7 @@ POST http://localhost:3001/api/room/test/roll
 content-type: application/json
 
 { 
-    "username": "tom555"
+    "username": "tom555",
+    "sides": 20,
+    "modifier": 1
 }

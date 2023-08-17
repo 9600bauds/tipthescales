@@ -18,9 +18,9 @@ function LoginPanel(props) {
     };
 
     return (
-        <div>
+        <span>
             {isExpanded ? (
-                <div>
+                <span>
                     <input 
                         type="password" 
                         placeholder="Enter password" 
@@ -28,11 +28,11 @@ function LoginPanel(props) {
                         onChange={handlePasswordChange} 
                     />
                     <button onClick={submitClicked}>Submit</button>
-                </div>
+                </span>
             ) : (
                 <span onClick={handleExpand}>Login</span>
             )}
-        </div>
+        </span>
     );
 }
 

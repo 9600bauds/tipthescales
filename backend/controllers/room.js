@@ -32,8 +32,10 @@ roomRouter.post('/:roomName/roll', async (request, response) => {
     }
 
     const rollData = {
-        ...createRoll(20),
-        username: sanitizedUsername
+        ...createRoll(request.body.sides),
+        modifier: Number(request.body.modifier),
+        sides: request.body.sides,
+        username: sanitizedUsername,
     };
 
     //Rig the result only if the room already has a password set, and the user has a cookie for that
