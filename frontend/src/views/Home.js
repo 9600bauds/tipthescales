@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { getRandomName } from '../utils/getRandomName';
 
 function Home() {
 
+    const [randomRoomName, setRandomRoomName] = useState('');
 
     return (
         <div className="container mt-5">
@@ -33,8 +34,13 @@ function Home() {
                 Ready to roll? Here&apos;s a randomly generated room name.
             </p>
             <div className="text-center mt-3">
-                <Link to={`/${getRandomName()}`} className="btn btn-primary">
-                    Try an Example Room
+                <Link 
+                    onMouseOver={() => setRandomRoomName(getRandomName())}
+                    to={`/${randomRoomName}`} 
+                    className="btn btn-primary"
+                >
+                    {randomRoomName ? `${window.location.host}/${randomRoomName}` : 'Try an Example Room'}
+                    
                 </Link>
             </div>
         </div>
