@@ -37,7 +37,11 @@ function Room() {
     const [sides, setSides] = useState(20); // How many sides does the dice have?
 
     useEffect(() => {
-        const socket = io.connect('/');
+        passwordModalRef.current = new Modal(document.getElementById('passwordModal'), {});
+
+        getInitialData();
+
+        const socket = io.connect('/', { transports: ['websocket'] });
         socket.emit('joinRoom', roomName);
 
         // Listen for new rolls
@@ -56,10 +60,6 @@ function Room() {
         socket.on('error', (error) => {
             toast.error('Socket Error:', getErrorMessage(error));
         });
-
-        passwordModalRef.current = new Modal(document.getElementById('passwordModal'), {});
-
-        getInitialData();
 
         return () => {
             socket.disconnect();
