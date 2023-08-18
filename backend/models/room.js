@@ -10,6 +10,7 @@ const roomSchema = new mongoose.Schema({
         unique: true,
         maxlength: 64,
     },
+    hasPassword: { type: Boolean, default: false },
     passwordHash: { type: String },
     rolls: [
         rollSchema

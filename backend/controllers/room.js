@@ -14,10 +14,30 @@ const { saveRollToDatabase, createRoll } = require('../utils/rollGenerator');
 roomRouter.get('/:roomName', async (request, response) => {
     let room = await Room.findOne({ name: request.params.roomName });
     if (!room) {
-        room = new Room({ name: request.params.roomName });
-        await room.save();
+        return response.status(404).json({ error: 'Room not found' });
     }
     response.json(room);
+});
+
+roomRouter.put('/:roomName', async (request, response) => {
+    const password = sanitizeInput(request.body.password);
+    let room = await Room.findOne({ name: request.params.roomName });
+    
+    if (room) { //Room already exists!
+        if(password){
+            return response.status(400).json({ error: 'Room already exists' });
+        }
+        return response.status(200).json(room);
+    }
+
+    room = new Room({ name: request.params.roomName });
+    if(password){
+        const saltRounds = 10;
+        room.passwordHash = await bcrypt.hash(password, saltRounds);
+        room.hasPassword = true;
+    }
+    await room.save();
+    return response.status(201).json(room);
 });
 
 roomRouter.post('/:roomName/roll', async (request, response) => {

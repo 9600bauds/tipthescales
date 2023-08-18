@@ -1,0 +1,6 @@
+PUT http://localhost:3001/api/room/test1234
+content-type: application/json
+
+{ 
+    "password": "tom555"
+}

@@ -37,23 +37,19 @@ loginRouter.post('/:roomName', async (request, response) => {
         return response.status(404).json({ error: 'Room not found' });
     }
 
+    if(!room.hasPassword){
+        return response.status(401).json({ error: 'Room does not require a password!' });
+    }
+
     const inputPw = sanitizeInput(request.body.password);
     if(!inputPw){
         return response.status(401).json({ error: 'Password is required!' });
     }
 
-    // If room doesn't have a password, set one. Otherwise, validate the provided password.
-    if (!room.passwordHash) {
-        //Set the room's password here
-        room.passwordHash = await bcrypt.hash(inputPw, saltRounds);
-        await room.save();
+    const match = await bcrypt.compare(inputPw, room.passwordHash);
+    if(!match){
+        return response.status(401).json({ error: 'Password incorrect!' });
     }
-    else {
-        const match = await bcrypt.compare(inputPw, room.passwordHash);
-        if(!match){
-            return response.status(401).json({ error: 'Password incorrect!' });
-        }
-    }    
 
     const verificationData = { roomName: roomName };
     const token = jwt.sign(verificationData, process.env.SECRET)
