@@ -1,14 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { uniqueNamesGenerator, adjectives } from 'unique-names-generator';
+
+import { getRandomName } from '../utils/getRandomName';
 
 function Home() {
-
-    const customConfig = {
-        dictionaries: [adjectives, adjectives], 
-        separator: '-',
-        length: 2,
-    };
 
 
     return (
@@ -38,7 +33,7 @@ function Home() {
                 Ready to roll? Here&apos;s a randomly generated room name.
             </p>
             <div className="text-center mt-3">
-                <Link to={`/${uniqueNamesGenerator(customConfig)}`} className="btn btn-primary">
+                <Link to={`/${getRandomName()}`} className="btn btn-primary">
                     Try an Example Room
                 </Link>
             </div>

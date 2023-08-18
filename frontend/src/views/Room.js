@@ -16,6 +16,7 @@ import RollPanelFair from '../components/RollPanelFair';
 import RollPanelRigged from '../components/RollPanelRigged';
 
 import { getErrorMessage } from '../utils/getErrorMessage';
+import { getRandomName } from '../utils/getRandomName';
 
 import Modal from 'bootstrap/js/dist/modal';
 
@@ -32,19 +33,45 @@ function Room() {
 
     const [rolls, setRolls] = useState([]); // State to store the list of rolls
 
-    const [username, setUsername] = useState(''); // State to store the current username input
-    const [modifier, setModifier] = useState(0); // Rolls will be modified by this amount
-    const [sides, setSides] = useState(20); // How many sides does the dice have?
+    const [username, _setUsername] = useState(''); // State to store the current username input
+    const [modifier, _setModifier] = useState(0); // Rolls will be modified by this amount
+    const [sides, _setSides] = useState(20); // How many sides does the dice have?
 
+    // Wrapper function for setUsername
+    const setUsername = (newUsername) => {
+        _setUsername(newUsername);
+        localStorage.setItem(`${roomName}-username`, newUsername);
+    };
+    
+    // Wrapper function for setModifier
+    const setModifier = (newModifier) => {
+        _setModifier(newModifier);
+        localStorage.setItem(`${roomName}-modifier`, newModifier);
+    };
+    
+    // Wrapper function for setSides
+    const setSides = (newSides) => {
+        _setSides(newSides);
+        localStorage.setItem(`${roomName}-sides`, newSides);
+    };
+
+    //This will be executed when the component is first mounted.
     useEffect(() => {
+        //Save the reference to our modal, for future use
         passwordModalRef.current = new Modal(document.getElementById('passwordModal'), {});
 
+        //Get the saved settings
+        setUsername(localStorage.getItem(`${roomName}-username`) || getRandomName());
+        setModifier(localStorage.getItem(`${roomName}-modifier`) || modifier);
+        setSides(localStorage.getItem(`${roomName}-sides`) || sides);        
+
+        //Fetch data from server and do stuff with it if needed
         getInitialData();
 
+        //Now do socket magic
         const socket = io.connect('/', { transports: ['websocket'] });
         socket.emit('joinRoom', roomName);
 
-        // Listen for new rolls
         socket.on('newRoll', (rollData) => {
             addRoll(rollData);
         });
