@@ -117,13 +117,13 @@ function Room() {
                     <div className="modal-content">
                         <div className="modal-body">
                             <p>This is a passworded room.</p>
-                            <p>Any user that knows the password may <b>cheat</b> and alter their own rolls.</p>
+                            <p>Any user that knows the password may <b>cheat</b> and secretly alter their own rolls.</p>
                             <p>If you don&apos;t agree to this, please make a new room and use that instead.</p>
-                            <p>You may continue without the password, but your rolls will be fair.</p>
+                            <p>You may continue without the password, you just won&apos;t be able to cheat.</p>
                         </div>
                         <div className="modal-footer">
                             <PasswordInput authenticateFunc={authenticateFunc} />
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Continue</button>
                         </div>
                     </div>
                 </div>
