@@ -17,13 +17,10 @@ function CreateRoom() {
         try {
             await axios.put(`/api/room/${roomName}`, { password });
     
-            try {
+            if(password){ //Set the cookie here
                 await axios.post(`/api/login/${roomName}`, { password }, { withCredentials: true });
-                navigate(`/${roomName}`);
-            } catch (error) {
-                toast.error(`Could not log in: ${getErrorMessage(error)}`);
             }
-            
+            navigate(`/${roomName}`);
         } catch (error) {
             toast.error(`Could not create room: ${getErrorMessage(error)}`);
         }
