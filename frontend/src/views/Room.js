@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import io from 'socket.io-client';
 import Modal from 'bootstrap/js/dist/modal';
+import PropTypes from 'prop-types';
 
 import PasswordInput from '../components/PasswordInput';
 import NameInput from '../components/NameInput';
@@ -18,9 +18,8 @@ import { getRandomName } from '../utils/getRandomName';
 
 import './Room.css';
 
-function Room() {
-    const { roomName } = useParams();
-    const navigate = useNavigate();
+function Room(props) {
+    const roomName = props.room.name;
 
     const passwordModalRef = useRef(null);
 
@@ -65,32 +64,21 @@ function Room() {
     }, [roomName]);
 
     const getInitialData = async () => {
-        try {
-            const roomResponse = await axios.get(`/api/room/${encodeURIComponent(roomName)}`);
-            const room = roomResponse.data;
+        setRolls(props.room.rolls.reverse()); //Reverse order since we want new rolls at the top
 
-            setRolls(room.rolls.reverse()); //Reverse order since we want new rolls at the top
-
-            if(room.hasPassword){
-                const verificationResponse = await axios.post(`/api/login/${encodeURIComponent(roomName)}/verifyCookie`, { roomName }, { withCredentials: true });
-                if(verificationResponse.data.isAuthenticated){
-                    setIsAuthenticated(true);
-                }
-                else{
-                    passwordModalRef.current.show();
-                }
+        if(props.room.hasPassword){
+            const verificationResponse = await axios.post(`/api/login/${encodeURIComponent(roomName)}/verifyCookie`, { roomName }, { withCredentials: true });
+            if(verificationResponse.data.isAuthenticated){
+                setIsAuthenticated(true);
             }
-
-            // If we've reached this point, it means the room exists and is verified, so we can safely set up the WebSocket connection
-            setupWebSocket();
-
-        } catch (error) {
-            if (error.response && error.response.status === 404) {
-                navigate(`/${roomName}/create`); //Send the user straight to the "create" page
-                return;
+            else{
+                passwordModalRef.current.show();
             }
-            toast.error(`Error fetching data: ${getErrorMessage(error)}`);
         }
+
+        // If we've reached this point, it means the room exists and is verified, so we can safely set up the WebSocket connection
+        setupWebSocket();
+
     };
 
     const setupWebSocket = () => {
@@ -187,5 +175,14 @@ function Room() {
         </div>
     );
 }
+
+Room.propTypes = {
+    room: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        hasPassword: PropTypes.bool,
+        passwordHash: PropTypes.string,
+        rolls: PropTypes.array
+    }).isRequired
+};
 
 export default Room;

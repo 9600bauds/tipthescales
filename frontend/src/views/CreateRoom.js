@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 
 import { toast } from 'react-toastify';
 
@@ -8,8 +9,8 @@ import { getErrorMessage } from '../utils/getErrorMessage';
 
 import './CreateRoom.css';
 
-function CreateRoom() {
-    const { roomName } = useParams();
+function CreateRoom(props) {
+    const roomName = props.roomName;
 
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -21,7 +22,9 @@ function CreateRoom() {
             /*if(password){ //Set the cookie here
                 await axios.post(`/api/login/${encodeURIComponent(newRoom.name)}`, { password }, { withCredentials: true });
             }*/
-            navigate(`/${encodeURIComponent(newRoom.name)}`);
+            //navigate(`/${encodeURIComponent(newRoom.name)}`);
+            props.setRoomData(newRoom);
+            props.setRoomExists(true);
         } catch (error) {
             toast.error(`Could not create room: ${getErrorMessage(error)}`);
         }
@@ -49,5 +52,11 @@ function CreateRoom() {
         </div>
     );
 }
+
+CreateRoom.propTypes = {
+    roomName: PropTypes.string.isRequired,
+    setRoomData: PropTypes.func.isRequired,
+    setRoomExists: PropTypes.func.isRequired
+};
 
 export default CreateRoom;

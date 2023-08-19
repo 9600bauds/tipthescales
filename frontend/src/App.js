@@ -9,8 +9,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Home from './views/Home';
-import Room from './views/Room';
-import CreateRoom from './views/CreateRoom';
+import RoomResolver from './views/RoomResolver';
 
 function App() {
     return (
@@ -18,8 +17,7 @@ function App() {
             <div className="App">
                 <ToastContainer />
                 <Routes> 
-                    <Route path="/:roomName/create" element={<CreateRoom />} />
-                    <Route path="/:roomName" element={<Room />} />
+                    <Route path="/:roomName" element={<RoomResolver />} />
                     <Route path="/" element={<Home />} />
                 </Routes>
             </div>
