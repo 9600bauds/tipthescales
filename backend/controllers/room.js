@@ -67,12 +67,20 @@ roomRouter.post('/:roomName/roll', async (request, response) => {
         try {
             const decodedToken = jwt.verify(token, process.env.SECRET);
             if (decodedToken.roomName !== request.params.roomName) {
-                return response.status(403).json({ error: 'Authorization failed!' });
+                return response.status(403)
+                .cookie('auth_' + request.params.roomName, '', {
+                    httpOnly: true,
+                    expires: new Date(0),  // Set the expiration date to the past
+                }).json({ error: 'Authorization failed! Please refresh.' });
             }
             rollData.value = request.body.rollResult;
     
         } catch (err) {
-            return response.status(403).json({ error: 'Authorization failed!' });
+            return response.status(403)
+            .cookie('auth_' + request.params.roomName, '', {
+                httpOnly: true,
+                expires: new Date(0),  // Set the expiration date to the past
+            }).json({ error: 'Authorization failed! Please refresh.' });
         }
     }
 
