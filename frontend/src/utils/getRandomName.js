@@ -7,5 +7,5 @@ const customConfig = {
 
 
 export function getRandomName() {
-    return uniqueNamesGenerator(customConfig) + Math.floor(Math.random() * 1000);
+    return uniqueNamesGenerator(customConfig) + Math.floor(Math.random() * 100);
 }
