@@ -70,6 +70,7 @@ function Room(props) {
             const verificationResponse = await axios.post(`/api/login/${encodeURIComponent(roomName)}/verifyCookie`, { roomName }, { withCredentials: true });
             if(verificationResponse.data.isAuthenticated){
                 setIsAuthenticated(true);
+                toast.info('Password accepted! Rolls may now optionally be modified before being confirmed.');
             }
             else{
                 passwordModalRef.current.show();
@@ -136,7 +137,7 @@ function Room(props) {
                         </div>
                         <div className="modal-footer">
                             <PasswordInput authenticateFunc={authenticateFunc} />
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Continue</button>
+                            <button type="button" className="btn btn-secondary btn-sm" data-bs-dismiss="modal">Continue Without Password</button>
                         </div>
                     </div>
                 </div>

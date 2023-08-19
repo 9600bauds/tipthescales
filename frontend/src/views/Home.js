@@ -25,9 +25,10 @@ function Home() {
 
             <h2 className="mt-4">How?</h2>
             <p>
-                Just go to {window.location.host}/<i>[anyRoomNameYouWant]</i> to enter or create a room. There is no login, no options, nothing.<br></br>
-                Note that rooms are public and disposable. Anyone with the URL can view your rolls, and anyone with the password can cheat.<br></br>
-                If you leak your room name or password, just make a new room.
+                Just go to {window.location.host}/<i>[anyRoomNameYouWant]</i> to enter or create a room.<br></br>
+                There is no login, no options, nothing.<br></br>
+                To invite people to your room, simply give them the URL.<br></br>
+                Note that rooms are public and disposable. Anyone with the URL can view your rolls, and anyone with the password can cheat. When you&apos;re done with a room, just make another one.<br></br>
             </p>
 
             <p>

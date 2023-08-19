@@ -19,10 +19,6 @@ function CreateRoom(props) {
         try {
             const response = await axios.put(`/api/room/${encodeURIComponent(roomName)}`, { password });
             const newRoom = response.data;
-            /*if(password){ //Set the cookie here
-                await axios.post(`/api/login/${encodeURIComponent(newRoom.name)}`, { password }, { withCredentials: true });
-            }*/
-            //navigate(`/${encodeURIComponent(newRoom.name)}`);
             props.setRoomData(newRoom);
             props.setRoomExists(true);
         } catch (error) {
@@ -49,6 +45,7 @@ function CreateRoom(props) {
                 </div>
             </div>
             <button onClick={handleCreate}>Create Room</button>
+            <p className='mt-3'>After creating the room, invite people by giving them this URL ({window.location.host}/{roomName}).</p>
         </div>
     );
 }

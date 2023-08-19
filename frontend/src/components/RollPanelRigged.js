@@ -51,9 +51,9 @@ function RollPanelRigged(props) {
             ) : (
                 <span>
                     <button onClick={handleDecrement}>-</button>
-                    {rollResult}
+                    <b>{rollResult}</b>
                     <button onClick={handleIncrement}>+</button>
-                    <button onClick={handleConfirmClick}>Confirm</button>
+                    <button style={{ marginLeft: '0.25rem' }} onClick={handleConfirmClick}>Confirm</button>
                 </span>
             )}
         </span>
