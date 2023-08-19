@@ -26,7 +26,7 @@ loginRouter.post('/:roomName/verifyCookie', async (request, response) => {
     return response.json({ isAuthenticated: isVerified });
 });
 
-// Endpoint to authenticate a user into a room. If the room doesn't have a password, sets one.
+// Endpoint to authenticate a user into a room.
 loginRouter.post('/:roomName', async (request, response) => {
     const saltRounds = 10
     

@@ -66,13 +66,13 @@ function Room() {
 
     const getInitialData = async () => {
         try {
-            const roomResponse = await axios.get(`/api/room/${roomName}`);
+            const roomResponse = await axios.get(`/api/room/${encodeURIComponent(roomName)}`);
             const room = roomResponse.data;
 
             setRolls(room.rolls.reverse()); //Reverse order since we want new rolls at the top
 
             if(room.hasPassword){
-                const verificationResponse = await axios.post(`/api/login/${roomName}/verifyCookie`, { roomName }, { withCredentials: true });
+                const verificationResponse = await axios.post(`/api/login/${encodeURIComponent(roomName)}/verifyCookie`, { roomName }, { withCredentials: true });
                 if(verificationResponse.data.isAuthenticated){
                     setIsAuthenticated(true);
                 }
@@ -124,7 +124,7 @@ function Room() {
     };
 
     const authenticateFunc = async (password) => {
-        axios.post(`/api/login/${roomName}`, { password }, { withCredentials: true })
+        axios.post(`/api/login/${encodeURIComponent(roomName)}`, { password }, { withCredentials: true })
             .then(response => {
                 setIsAuthenticated(true);
                 passwordModalRef.current.hide();

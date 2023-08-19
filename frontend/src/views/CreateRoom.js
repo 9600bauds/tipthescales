@@ -9,18 +9,19 @@ import { getErrorMessage } from '../utils/getErrorMessage';
 import './CreateRoom.css';
 
 function CreateRoom() {
-    const [password, setPassword] = useState('');
     const { roomName } = useParams();
+
+    const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
     const handleCreate = async () => {
         try {
-            await axios.put(`/api/room/${roomName}`, { password });
-    
+            const response = await axios.put(`/api/room/${encodeURIComponent(roomName)}`, { password });
+            const newRoom = response.data;
             if(password){ //Set the cookie here
-                await axios.post(`/api/login/${roomName}`, { password }, { withCredentials: true });
+                await axios.post(`/api/login/${encodeURIComponent(newRoom.name)}`, { password }, { withCredentials: true });
             }
-            navigate(`/${roomName}`);
+            navigate(`/${encodeURIComponent(newRoom.name)}`);
         } catch (error) {
             toast.error(`Could not create room: ${getErrorMessage(error)}`);
         }
