@@ -18,9 +18,9 @@ function CreateRoom() {
         try {
             const response = await axios.put(`/api/room/${encodeURIComponent(roomName)}`, { password });
             const newRoom = response.data;
-            if(password){ //Set the cookie here
+            /*if(password){ //Set the cookie here
                 await axios.post(`/api/login/${encodeURIComponent(newRoom.name)}`, { password }, { withCredentials: true });
-            }
+            }*/
             navigate(`/${encodeURIComponent(newRoom.name)}`);
         } catch (error) {
             toast.error(`Could not create room: ${getErrorMessage(error)}`);
