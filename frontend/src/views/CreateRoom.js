@@ -45,7 +45,10 @@ function CreateRoom(props) {
                 </div>
             </div>
             <button onClick={handleCreate}>Create Room</button>
-            <p className='mt-3'>After creating the room, invite people by giving them this URL ({window.location.host}/{roomName}).</p>
+            <div className="explanation-text">
+                <p className='mt-3'>After creating the room, invite people by giving them this URL ({window.location.host}/{roomName}).</p>
+            </div>
+            
         </div>
     );
 }

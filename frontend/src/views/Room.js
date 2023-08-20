@@ -115,6 +115,7 @@ function Room(props) {
     const authenticateFunc = async (password) => {
         axios.post(`/api/login/${encodeURIComponent(roomName)}`, { password }, { withCredentials: true })
             .then(response => {
+                toast.info('Password accepted! Rolls may now optionally be modified before being confirmed.');
                 setIsAuthenticated(true);
                 passwordModalRef.current.hide();
             })

@@ -33,9 +33,9 @@ function RollPanelRigged(props) {
             modifier: props.modifier,
         };
 
+        setRollResult(null);
         try {
             await axios.post(`/api/room/${props.roomName}/roll`, rollData, { withCredentials: true });
-            setRollResult(null);  // Reset the roll result after confirmation
         } catch (error) {
             const errorMessage = error.response && error.response.data && error.response.data.error 
                 ? error.response.data.error 
