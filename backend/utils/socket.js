@@ -1,6 +1,10 @@
 const socketIo = require('socket.io');
 const { FRONTEND_URL } = require('./config');
 
+const { state } = require('./serverState');
+
+const index = require('../index');
+
 let io;
 
 function initialize(server) {
@@ -13,7 +17,7 @@ function initialize(server) {
   });
 
   io.on('connection', (socket) => {
-    console.log('New client connected');
+    state.activeConnections++;
 
     socket.on('joinRoom', (roomName) => {
       // Leave previous room
@@ -26,7 +30,12 @@ function initialize(server) {
     });
 
     socket.on('disconnect', () => {
-      console.log('Client disconnected');
+      state.activeConnections--;
+      // Check for graceful shutdown
+      if (state.shuttingDown && state.activeConnections === 0) {
+        console.log('Socket.io integration reached 0 connections. Exiting process...');
+        process.exit(0);
+      }
     });
   });
   return io;

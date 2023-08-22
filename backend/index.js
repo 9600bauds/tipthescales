@@ -4,6 +4,7 @@ const http = require('http');
 const socketUtil = require('./utils/socket');
 
 const server = http.createServer(app);
+
 socketUtil.initialize(server);
 
 server.listen(config.PORT, () => {
