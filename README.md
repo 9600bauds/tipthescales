@@ -18,4 +18,5 @@ Do note that players will be clearly warned upon joining a room about potential 
 # Stack
 
 Backend: Node.js, Express, Mongoose (MongoDB), JWT, Docker/Fly.io, WebSockets (Socket.io)
+
 Frontend: React, React Router, Axios, Bootstrap, Styled-components, WebSockets (Socket.io Client)
