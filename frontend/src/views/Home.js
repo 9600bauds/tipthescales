@@ -25,8 +25,8 @@ function Home() {
             </p>
             <h2 className="mt-4">Why?</h2>
             <p>
-                Maybe you&apos;re playing an RPG and want your DM to have carte blance so they can spice the game up. Use however you want.<br></br>
-                Do note that players will be clearly warned upon joining a room about potential cheating.
+                This creates an asymmetrical environment, intended for RPG sessions where it&apos;s desirable for some players to have full control, whilst still keeping up the mere appearance of randomness.<br></br>
+                Use however you want. Do note that players will be clearly warned upon joining a room about potential cheating. The cheating, while secret, is consensual.
             </p>
 
             <hr/>
